@@ -1,9 +1,16 @@
+using InventoryManagement.DAL;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<InventoryDBContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -25,3 +32,7 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
+
+// dotnet ef migrations add InitialCreate --project InventoryManagement.DAL --startup-project InventoryManagement.Web
+// dotnet ef database update --project InventoryManagement.DAL --startup-project InventoryManagement.Web
